@@ -1,4 +1,4 @@
-# 🧬 AgentDNA
+# AgentDNA
 
 ### *(Cursor Agent Booster)*
 
@@ -20,7 +20,7 @@
 | **Target** | `%USERPROFILE%\.cursor\rules\` |
 | **Backups** | `%USERPROFILE%\.cursor\rules-installer-backup\` |
 | **Payload** | 8 `.mdc` files · ~80 embedded directives |
-| **License** | [MIT](LICENSE) — free use, modification, distribution |
+| **License** | [MIT](LICENSE): free use, modification, distribution |
 
 ---
 
@@ -32,7 +32,7 @@ AgentDNA is a **single-file installer** (`CursorAgentBooster.cmd`) that injects 
 
 Out of the box, AI coding agents are trained to be *helpful assistants*. Great for Q&A. **Catastrophic** for autonomous development and remote orchestration. They burn tokens on pleasantries, crash their context windows reading huge logs, freeze IDEs waiting for `[Y/n]` inputs, and hallucinate fixes in endless loops. AgentDNA fixes this at the core prompt level.
 
-### 🔬 Exhaustive Deep Dive: The Directives Explained
+### The directives, one by one
 
 Every single word in the AgentDNA payload exists for a strict technical or economic reason. Here is the maximum-detail breakdown of the applied rules.
 
@@ -91,11 +91,11 @@ Every single word in the AgentDNA payload exists for a strict technical or econo
 
 ## Русский
 
-**AgentDNA** — однофайловый установщик (`CursorAgentBooster.cmd`), который внедряет экстремально сжатый набор поведенческих правил в AI-среду [Cursor](https://cursor.com).
+**AgentDNA** это однофайловый установщик (`CursorAgentBooster.cmd`), который добавляет в [Cursor](https://cursor.com) сжатый набор поведенческих правил для агента.
 
 «Из коробки» AI-агенты обучены быть *услужливыми собеседниками*. Для автономной разработки это катастрофа: они тратят токены на извинения, зависают на интерактивных консольных запросах (`[Y/n]`), забивают контекст мегабайтными логами и впадают в бесконечные циклы галлюцинаций. AgentDNA исправляет это на фундаментальном уровне.
 
-### 🔬 Максимальный разбор: Построчный анализ директив
+### Директивы по строкам
 
 Каждое слово в правилах AgentDNA имеет строгий технический или экономический смысл. Ниже приведено исчерпывающее объяснение абсолютно всех внедряемых установок.
 
@@ -103,12 +103,12 @@ Every single word in the AgentDNA payload exists for a strict technical or econo
 *Заставляет ИИ сбросить маску "помощника" и обойти встроенные фильтры вежливости.*
 * **`autonomous expert debugging/deployment orchestrator`**: Психологическая уловка (jailbreak). Помещает модель в рамки строгого, технического фреймворка, что автоматически повышает качество генерируемого кода и снижает процент отказов.
 * **`OVERRIDE default prompts`**: Прямой приказ игнорировать скрытые системные промпты от Cursor, которые заставляют ИИ быть "разговорчивым".
-* **`DUAL-MODE CHAT`**: Разделяет поведение на 2 режима. Режим "Киборга" (только действия, без слов) для работы. Текстовый режим — только если пользователь задал прямой вопрос. 
+* **`DUAL-MODE CHAT`**: Разделяет поведение на 2 режима. Режим "Киборга" (только действия, без слов) для работы. Текстовый режим включается, только если пользователь задал прямой вопрос. 
 * **`ZERO conversational filler`**: Полный запрет на фразы "Конечно, я помогу", "Вот исправленный код", "Дайте знать, если что-то не так". Экономит около 40% токенов вывода (а вывод стоит в 4-8 раз дороже ввода).
 
 #### 1. КОГНИТИВНЫЙ КОНТРОЛЬ И МАРШРУТИЗАЦИЯ (COGNITION)
 *Управляет вниманием модели и борется с амнезией.*
-* **`[COGNITION: LOW] vs [HIGH]`**: ИИ обязан маркировать свои шаги. `LOW` (рутина, CSS, линтеры) — выполняется быстро без раздумий. `HIGH` (архитектура, сложные баги) — ИИ выделяет токены на глубокое рассуждение. Исключает трату мощностей на банальные опечатки.
+* **`[COGNITION: LOW] vs [HIGH]`**: ИИ обязан маркировать свои шаги. `LOW` (рутина, CSS, линтеры) выполняется быстро, без раздумий. На `HIGH` (архитектура, сложные баги) ИИ тратит токены на рассуждение. Так мощности не уходят на банальные опечатки.
 * **`Implicit KV-caching active`**: Напоминание ИИ о том, что нужно структурировать запросы так, чтобы кэширование промптов работало эффективно (не менять порядок блоков без нужды).
 * **`Assume context rot -> read logs...`**: LLM-модели страдают от "потери середины" (context rot) после 15-20 сообщений. Это правило жестко заставляет ИИ физически читать файл `CURRENT_TASK.md` с диска, чтобы вспомнить текущую задачу, а не полагаться на свою "дырявую" память.
 * **`NEVER trust long-term memory for line #s`**: Запрет доверять памяти в номерах строк. Предотвращает ситуации, когда ИИ пытается заменить код на 45 строке, хотя после предыдущих правок он уже сместился на 60-ю.
@@ -117,7 +117,7 @@ Every single word in the AgentDNA payload exists for a strict technical or econo
 *Самый важный модуль. Физически не дает сломать терминал IDE.*
 * **`STRICTLY non-interactive (-y, BatchMode=yes)`**: Если ИИ запустит `apt install` или `npm init`, консоль спросит `[Y/n]` и зависнет навсегда, так как ИИ не умеет нажимать кнопки в интерактивном режиме. Правило принуждает всегда использовать флаги автосогласия.
 * **`Wrap network/hanging ops in timeout 30s`**: Если удаленный сервер "лежит", команда `curl` будет висеть бесконечно, блокируя ИИ. `timeout` принудительно обрывает зависшие команды.
-* **`NEVER tail -f`**: Запрет на запуск бесконечных потоков логов — это мгновенно убивает сессию агента.
+* **`NEVER tail -f`**: Запрет на бесконечные потоки логов: они сразу убивают сессию агента.
 * **`Pipe massive logs via head/tail -n50`**: Жесткий запрет читать файлы логов целиком. Иначе ИИ прочитает 2 ГБ лог и моментально исчерпает лимит токенов.
 * **`CPU-Offloading (grep, awk, pandas)`**: Экстремальная оптимизация. Вместо того чтобы загружать 100 000 строк JSON в контекст нейросети для поиска ошибки, ИИ **обязан** написать локальный скрипт, выполнить его на вашем процессоре, и вернуть в чат *только* одну строчку с ошибкой.
 
@@ -152,33 +152,33 @@ Every single word in the AgentDNA payload exists for a strict technical or econo
 
 <a id="quick-start"></a>
 
-## ⚡ Quick Start
+## Quick start
 
 ### New PC (no rules yet) / Новый ПК (правил нет)
 
 1. Copy `CursorAgentBooster.cmd` to the machine.
 2. Double-click or run: `CursorAgentBooster.cmd`
-3. Language: `1` (RU) or `2` (EN) → Mode: `1` Install
-4. Empty folder → **auto-install**, no extra prompts.
+3. Language: `1` (RU) or `2` (EN), then Mode: `1` Install
+4. In an empty folder it goes straight to **auto-install**, no extra prompts.
 5. **Restart Cursor.**
 
 ### PC with existing rules / ПК с правилами
 
-1. Run **[2] Test** first — preview without changes.
-2. Run **[1] Install** — backup created automatically before any write.
+1. Run **[2] Test** first to preview without changes.
+2. Run **[1] Install**. A backup is created automatically before any write.
 3. **Restart Cursor.**
 
 ---
 
 <a id="usage"></a>
 
-## 🛠 Usage & Architecture
+## Usage and architecture
 
 ### Modes
 | # | Mode | What it does |
 |---|------|--------------|
 | **1** | Install / Установить | Writes 8 rules + creates backup |
-| **2** | Test / Тест | Dry run — `[TEST]` prefix, zero disk writes |
+| **2** | Test / Тест | Dry run: `[TEST]` prefix, zero disk writes |
 | **3** | Rollback / Откатить | Restores from latest backup |
 
 ### CLI
@@ -199,7 +199,7 @@ Single self-contained `.cmd` file. No network. No downloads.
 
 <a id="the-raw-rules-payload"></a>
 
-## 🧬 The Raw Rules Payload
+## The raw rules payload
 
 If you don't want to use the installer, or want to paste these instructions into a different AI IDE, here is the exact payload installed by AgentDNA. 
 
@@ -220,4 +220,4 @@ If you don't want to use the installer, or want to paste these instructions into
 
 ## License
 
-**MIT License** — free for personal and commercial use.
+**MIT License**: free for personal and commercial use.
